@@ -16,24 +16,32 @@ public class Memoria{
             loadHierarquia();
         }
 
-        public Pair<Integer, Pair<Integer, Integer>> miss(int endereco){
+        public Pair<Integer, ArrayList<Pair<Integer, Integer>>> miss(int[] enderecos){
             int custo   = hierarquia.get(0).getA();
             int chance  = hierarquia.get(0).getB();
             int probHit = gerador.nextInt(100);
             if(probHit < chance){
-                return new Pair(custo, memoria.get(endereco));
+                Pair<Integer, ArrayList<Pair<Integer, Integer>>> resposta = new Pair(0, new ArrayList<>());
+                for(int i = 0; i < enderecos.length; i++){
+                    resposta.getB().add(memoria.get(enderecos[i]));
+                }
+                return resposta;
             } 
-            return miss(1, custo, endereco);
+            return miss(1, custo, enderecos);
         }
 
-        private Pair<Integer, Pair<Integer, Integer>> miss(int mem, int custo, int endereco){
+        private Pair<Integer, ArrayList<Pair<Integer, Integer>>> miss(int mem, int custo, int[] enderecos){
             custo      += hierarquia.get(mem).getA();
             int chance  = hierarquia.get(mem).getB();
             int probHit = gerador.nextInt(100);
             if(probHit < chance){
-                return new Pair(custo, memoria.get(endereco));
+                Pair<Integer, ArrayList<Pair<Integer, Integer>>> resposta = new Pair(0, new ArrayList<>());
+                for(int i = 0; i < enderecos.length; i++){
+                    resposta.getB().add(memoria.get(enderecos[i]));
+                }   
+                return resposta;
             } 
-            return miss(mem + 1, custo, endereco);
+            return miss(mem + 1, custo, enderecos);
         }
 
         public void loadHierarquia(){

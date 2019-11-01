@@ -6,8 +6,8 @@ import java.io.FileNotFoundException;
 
 public class Memoria{
 
-        private ArrayList<Pair<Integer, Integer>> memoria = new ArrayList<>();
-        private ArrayList<Pair<Integer, Integer>> hierarquia;
+        private ArrayList<Pair<Integer, Integer>> memoria    = new ArrayList<>();
+        private ArrayList<Pair<Integer, Integer>> hierarquia = new ArrayList<>();
         private Random gerador = new Random();
 
 
@@ -16,12 +16,12 @@ public class Memoria{
             loadHierarquia();
         }
 
-        public Pair<Integer, ArrayList<Pair<Integer, Integer>>> miss(int[] enderecos){
+        public Pair<Integer, ArrayList<Pair<Integer, Integer>>> miss(int[] enderecos) throws IndexOutOfBoundsException {
             int custo   = hierarquia.get(0).getA();
             int chance  = hierarquia.get(0).getB();
             int probHit = gerador.nextInt(100);
             if(probHit < chance){
-                Pair<Integer, ArrayList<Pair<Integer, Integer>>> resposta = new Pair(0, new ArrayList<>());
+                Pair<Integer, ArrayList<Pair<Integer, Integer>>> resposta = new Pair(custo, new ArrayList<>());
                 for(int i = 0; i < enderecos.length; i++){
                     resposta.getB().add(memoria.get(enderecos[i]));
                 }
@@ -30,15 +30,15 @@ public class Memoria{
             return miss(1, custo, enderecos);
         }
 
-        private Pair<Integer, ArrayList<Pair<Integer, Integer>>> miss(int mem, int custo, int[] enderecos){
+        private Pair<Integer, ArrayList<Pair<Integer, Integer>>> miss(int mem, int custo, int[] enderecos) throws IndexOutOfBoundsException {
             custo      += hierarquia.get(mem).getA();
             int chance  = hierarquia.get(mem).getB();
             int probHit = gerador.nextInt(100);
             if(probHit < chance){
-                Pair<Integer, ArrayList<Pair<Integer, Integer>>> resposta = new Pair(0, new ArrayList<>());
+                Pair<Integer, ArrayList<Pair<Integer, Integer>>> resposta = new Pair(custo, new ArrayList<>());
                 for(int i = 0; i < enderecos.length; i++){
                     resposta.getB().add(memoria.get(enderecos[i]));
-                }   
+                }  
                 return resposta;
             } 
             return miss(mem + 1, custo, enderecos);
@@ -96,6 +96,7 @@ public class Memoria{
                     chance = Integer.parseInt(linha[3]);
                 }
                 Pair novoPar = new Pair(enderecoPulo, chance);
+                memoria.remove(endereco);
                 memoria.add(endereco, novoPar);
             }
             lerArquivo.close();

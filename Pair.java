@@ -1,30 +1,30 @@
 public class Pair<T, E>{
 
-    private T a;
-    private E b;
+    private T first;
+    private E second;
 
-    public Pair(T a, E b){
-        this.a = a;
-        this.b = b;
+    public Pair(T first, E second){
+        this.first = first;
+        this.second = second;
     }
 
-    public T getA(){
-        return a;
+    public T getFirst(){
+        return first;
     }
 
-    public E getB(){
-        return b;
+    public E getSecond(){
+        return second;
     }
 
-    public void setA(T a){
-        this.a = a;
+    public void setFirst(T first){
+        this.first = first;
     }
 
-    public void setB(E b){
-        this.b = b;
+    public void setSecond(E second){
+        this.second = second;
     }
 
     public String toString(){
-        return "<" + a + ":" + b + ">";
+        return "<" + first + ":" + second + ">";
     }
 }

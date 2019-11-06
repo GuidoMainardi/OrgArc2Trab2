@@ -16,44 +16,36 @@ public class Processador{
         int total = 0;
         int hit = 0;
         int miss = 0;
-        //for(int i = 0; i < 10000; i++){
-            Random gerador = new Random();
-            Scanner teclado = new Scanner(System.in);
-            // simulando o programa
-            try {
-                while(instrucoes < limInst){
-                    int probSalto = gerador.nextInt(100);
-                    Pair<Integer, Pair<Integer,Integer>> instrucao = memoria.getInstrucao(atual);
-                    System.out.print("instrução: " + atual + "  ");
-                    System.out.println(instrucao.getA() == 0 ? "hit" : "miss");
-                    System.out.println(memoria);
-                    hit += instrucao.getA() == 0 ? 1 : 0;
-                    miss += instrucao.getA() == 0 ? 0 : 1;
-                    //teclado.nextLine();
-                    custo_total += 1 + instrucao.getA();
-                    if(probSalto < instrucao.getB().getB()){
-                        atual = instrucao.getB().getA();
-                    }else{
-                        atual ++;
-                    }
-                    instrucoes ++;
-                    
+        Random gerador = new Random();
+        Scanner teclado = new Scanner(System.in);
+        // simulando o programa
+        try {
+            while(instrucoes < limInst){
+                int probSalto = gerador.nextInt(100);
+                Pair<Integer, Pair<Integer,Integer>> instrucao = memoria.getInstrucao(atual);
+                System.out.print("instrução: " + atual + "  ");
+                System.out.println(instrucao.getFirst() == 0 ? "hit" : "miss");
+                System.out.println(memoria);
+                hit += instrucao.getFirst() == 0 ? 1 : 0;
+                miss += instrucao.getFirst() == 0 ? 0 : 1;
+                //teclado.nextLine();
+                custo_total += 1 + instrucao.getFirst();
+                if(probSalto < instrucao.getSecond().getSecond()){
+                    atual = instrucao.getSecond().getFirst();
+                }else{
+                    atual ++;
                 }
-            } catch (IndexOutOfBoundsException e) {
+                instrucoes ++;
                 
             }
-            total += custo_total;
-                System.out.printf("hits por instrução: %.2f\n", (float) hit / instrucoes);
-                System.out.printf("miss por instrução: %.2f\n", (float) miss / instrucoes);
-                System.out.println("custo total " + custo_total);
-                System.out.println("custo medio " + custo_total / instrucoes);
-                System.out.println("FIM! :)");
-        /* }
-         * String saida = LFU ? "LFU" : "Random";
-         * System.out.println(saida);
-         * System.out.println("hits: " + hit);
-         * System.out.println("miss: " + miss);
-         * System.out.println("Media de instruções em 10000 runs: " + total / instrucoes / 10000);
-         */
+        } catch (IndexOutOfBoundsException e) {
+            
+        }
+        total += custo_total;
+            System.out.printf("hits por instrução: %.2f\n", (float) hit / instrucoes);
+            System.out.printf("miss por instrução: %.2f\n", (float) miss / instrucoes);
+            System.out.println("custo total " + custo_total);
+            System.out.println("custo medio " + custo_total / instrucoes);
+            System.out.println("FIM! :)");
     }
 }

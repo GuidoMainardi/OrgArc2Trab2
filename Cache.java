@@ -51,12 +51,12 @@ public class Cache {
         for(int j = 0; j < memoria_associaiva[c].length; j++){
 
             int tagAtual = memoria_associaiva[c][j];
+
             int linha_cache = (c * vias) + j;
-            int bitValidade = cache[linha_cache][0].getA();
-            
+            int bitValidade = cache[linha_cache][0].getFirst();
             if(tagAtual == tag &&  bitValidade == 1){
                 // mundo feliz e contente aonde tudo é maravilhoso
-                cache[linha_cache][0].setB(cache[linha_cache][0].getB() + 1); // cona o numero de vesez que a instrução foi usada
+                cache[linha_cache][0].setSecond(cache[linha_cache][0].getSecond() + 1); // cona o numero de vesez que a instrução foi usada
                 return new Pair(0, cache[linha_cache][p + 1]);
             }
         }
@@ -81,33 +81,34 @@ public class Cache {
         int tag = endereco >> (tamPow(palavra_linha) + tamPow(blocos));
         int inicio_bloco = c * vias;
         int fim_bloco = (c + 1) * vias;
-        int menor = cache[inicio_bloco][0].getB();
+        int menor = cache[inicio_bloco][0].getSecond();
+
         int linha_menor = inicio_bloco;
         for(int i = inicio_bloco; i < fim_bloco; i ++){
-            if(cache[i][0].getA() == 0){
-                salvaChace(c, i, inicio_bloco, tag, enderecos_carregados.getB());
+            if(cache[i][0].getFirst() == 0){
+                salvaChace(c, i, inicio_bloco, tag, enderecos_carregados.getSecond());
                 // linha possivel de dar merda
-                return new Pair(enderecos_carregados.getA(), cache[i][(endereco % palavra_linha) + 1]);
+                return new Pair(enderecos_carregados.getFirst(), cache[i][(endereco % palavra_linha) + 1]);
             }
 
-            if(cache[i][0].getB() < menor){
+            if(cache[i][0].getSecond() < menor){
                 linha_menor = i;
-                menor = cache[i][0].getB();
+                menor = cache[i][0].getSecond();
             }
         }
-        salvaChace(c, politica(linha_menor, c), inicio_bloco, tag, enderecos_carregados.getB());
+        salvaChace(c, politica(linha_menor, c), inicio_bloco, tag, enderecos_carregados.getSecond());
 
-        return new Pair(enderecos_carregados.getA(), enderecos_carregados.getB().get(endereco % palavra_linha));
+        return new Pair(enderecos_carregados.getFirst(), enderecos_carregados.getSecond().get(endereco % palavra_linha));
     }
 
     private void salvaChace(int c, int i, int inicio_bloco, int tag, ArrayList<Pair<Integer, Integer>> instrucoes){
         memoria_associaiva[c][i - inicio_bloco] = tag;
-        cache[i][0].setB(cache[i][0].getB() + 1);
+        cache[i][0].setSecond(cache[i][0].getSecond() + 1);
         for(int j = 1; j < cache[i].length; j++){
             cache[i][j] = instrucoes.get(j - 1);
         }
-        cache[i][0].setA(1);
-        cache[i][0].setB(1);
+        cache[i][0].setFirst(1);
+        cache[i][0].setSecond(1);
     }
 
     private int politica(int i, int c){

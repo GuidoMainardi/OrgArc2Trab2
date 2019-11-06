@@ -17,13 +17,13 @@ public class Memoria{
         }
 
         public Pair<Integer, ArrayList<Pair<Integer, Integer>>> miss(int[] enderecos) throws IndexOutOfBoundsException {
-            int custo   = hierarquia.get(0).getA();
-            int chance  = hierarquia.get(0).getB();
+            int custo   = hierarquia.get(0).getFirst();
+            int chance  = hierarquia.get(0).getSecond();
             int probHit = gerador.nextInt(100);
             if(probHit < chance){
                 Pair<Integer, ArrayList<Pair<Integer, Integer>>> resposta = new Pair(custo, new ArrayList<>());
                 for(int i = 0; i < enderecos.length; i++){
-                    resposta.getB().add(memoria.get(enderecos[i]));
+                    resposta.getSecond().add(memoria.get(enderecos[i]));
                 }
                 return resposta;
             } 
@@ -31,13 +31,13 @@ public class Memoria{
         }
 
         private Pair<Integer, ArrayList<Pair<Integer, Integer>>> miss(int mem, int custo, int[] enderecos) throws IndexOutOfBoundsException {
-            custo      += hierarquia.get(mem).getA();
-            int chance  = hierarquia.get(mem).getB();
+            custo      += hierarquia.get(mem).getFirst();
+            int chance  = hierarquia.get(mem).getSecond();
             int probHit = gerador.nextInt(100);
             if(probHit < chance){
                 Pair<Integer, ArrayList<Pair<Integer, Integer>>> resposta = new Pair(custo, new ArrayList<>());
                 for(int i = 0; i < enderecos.length; i++){
-                    resposta.getB().add(memoria.get(enderecos[i]));
+                    resposta.getSecond().add(memoria.get(enderecos[i]));
                 }  
                 return resposta;
             } 

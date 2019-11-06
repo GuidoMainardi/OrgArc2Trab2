@@ -2,11 +2,11 @@ import java.util.Random;
 import java.util.ArrayList;
 public class Cache {
 
-    private int vias;
+    private int blocos;
     private int linhas;
     private boolean LFU;
     private Random gerador = new Random();
-    private int tamanho_bloco;
+    private int vias;
     private int palavra_linha;
     private Memoria hierarquia;
     private int[][] memoria_associaiva;
@@ -15,15 +15,15 @@ public class Cache {
 
     public Cache(int tamanho, int palavra_linha, int tamanho_palavra, int vias, boolean LFU){
         this.LFU = LFU;
-        this.vias = vias;
+        this.blocos = tamanho / (palavra_linha * tamanho_palavra) / vias;
         this.palavra_linha = palavra_linha;
         this.linhas = tamanho / (palavra_linha * tamanho_palavra);
-        this.tamanho_bloco = linhas / vias;
+        this.vias = vias;
         cache = new Pair[linhas][palavra_linha + 1];
         for(int i = 0; i < linhas; i++){
             cache[i][0] = new Pair(0, 0);
         }
-        memoria_associaiva = new int[vias][tamanho_bloco];
+        memoria_associaiva = new int[this.blocos][vias];
         hierarquia = new Memoria();
     }
 
@@ -46,15 +46,14 @@ public class Cache {
     public Pair<Integer, Pair<Integer, Integer>> getInstrucao(int endereco) {
 
         int p = endereco & andNum(palavra_linha);
-        int c = (endereco >> tamPow(palavra_linha)) & andNum(vias);
-        int tag = endereco >> (tamPow(palavra_linha) + tamPow(vias));
-
+        int c = (endereco >> tamPow(palavra_linha)) & andNum(blocos);
+        int tag = endereco >> (tamPow(palavra_linha) + tamPow(blocos));
         for(int j = 0; j < memoria_associaiva[c].length; j++){
 
             int tagAtual = memoria_associaiva[c][j];
-            int linha_cache = (c * tamanho_bloco) + j;
+            int linha_cache = (c * vias) + j;
             int bitValidade = cache[linha_cache][0].getA();
-
+            
             if(tagAtual == tag &&  bitValidade == 1){
                 // mundo feliz e contente aonde tudo é maravilhoso
                 cache[linha_cache][0].setB(cache[linha_cache][0].getB() + 1); // cona o numero de vesez que a instrução foi usada
@@ -78,10 +77,10 @@ public class Cache {
     private Pair<Integer, Pair<Integer, Integer>> miss(int endereco) throws IndexOutOfBoundsException {
         int[] enderecos_pedidos = montaLinha(endereco);
         Pair<Integer, ArrayList<Pair<Integer, Integer>>> enderecos_carregados = hierarquia.miss(enderecos_pedidos);
-        int c = (endereco >> tamPow(palavra_linha)) & andNum(vias);
-        int tag = endereco >> (tamPow(palavra_linha) + tamPow(vias));
-        int inicio_bloco = c * tamanho_bloco;
-        int fim_bloco = (c + 1) * tamanho_bloco;
+        int c = (endereco >> tamPow(palavra_linha)) & andNum(blocos);
+        int tag = endereco >> (tamPow(palavra_linha) + tamPow(blocos));
+        int inicio_bloco = c * vias;
+        int fim_bloco = (c + 1) * vias;
         int menor = cache[inicio_bloco][0].getB();
         int linha_menor = inicio_bloco;
         for(int i = inicio_bloco; i < fim_bloco; i ++){
@@ -115,7 +114,27 @@ public class Cache {
         if(LFU){
             return i;
         }
-        i = gerador.nextInt(tamanho_bloco);
-        return c * tamanho_bloco + i;
+        i = gerador.nextInt(vias);
+        return c * vias + i;
+    }
+
+    public String toString(){
+        String resposta = "+";
+        for(int i = 0; i < cache[0].length * 10; i ++){
+            resposta += "-";
+        }
+        resposta += "+ \n";
+        for(int i = 0; i < linhas; i ++){
+            for(int j = 0; j < cache[0].length; j ++){
+                resposta += "| " + cache[i][j] + " ";
+            }
+            resposta += "|\n";
+        }
+        resposta += "+";
+        for(int i = 0; i < cache[0].length * 10; i ++){
+            resposta += "-";
+        }
+        resposta += "+";
+        return resposta;
     }
 }

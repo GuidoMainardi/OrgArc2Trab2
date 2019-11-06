@@ -25,9 +25,9 @@ public class Processador{
                 //teclado.nextLine();
                 int probSalto = gerador.nextInt(100);
                 Pair<Integer, Pair<Integer,Integer>> instrucao = memoria.getInstrucao(atual);
-                custo_total += 1 + instrucao.getA();
-                if(probSalto < instrucao.getB().getB()){
-                    atual = instrucao.getB().getA();
+                custo_total += 1 + instrucao.getFirst();
+                if(probSalto < instrucao.getSecond().getSecond()){
+                    atual = instrucao.getSecond().getFirst();
                 }else{
                     atual ++;
                 }
@@ -37,6 +37,7 @@ public class Processador{
             System.out.println("custo total " + custo_total);
             System.out.println("custo medio " + custo_total / instrucoes);
             System.out.println("FIM! :)");
+            teclado.close();
         }
     }
 }

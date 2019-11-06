@@ -3,21 +3,26 @@ import java.util.Scanner;
 
 public class Processador{
     public static void main(String[] args) {
-        int tamanho = 128;
-        int palavra_linha = 4;
-        int tamanho_palavra = 4;
-        int vias = 4;
-        boolean LFU = false;
+        Scanner teclado = new Scanner(System.in);
+        System.out.println("Qual o tamanho da cache (em Bytes)? ");
+        int tamanho = teclado.nextInt();
+        System.out.println("Quantas palavras tem em cada linha da cache? ");
+        int palavra_linha = teclado.nextInt();
+        System.out.println("Qual o tamanho da palavra (em Bytes)? ");
+        int tamanho_palavra = teclado.nextInt();
+        System.out.println("Qual o numero de vias? ");
+        int vias = teclado.nextInt();
+        System.out.println("Você deseja usar a politica LFU [L] ou Random [R] ?");
+        String respostas = teclado.nextLine();
+        boolean LFU = respostas.equalsIgnoreCase("R") ? false : true;
         Cache memoria = new Cache(tamanho, palavra_linha, tamanho_palavra, vias, LFU);
         int limInst = 2000; // limite de instruções a serem executadas, para evitar laços infinitos
         int instrucoes = 0;
         int atual = 0;
         int custo_total = 0;
-        int total = 0;
         int hit = 0;
         int miss = 0;
         Random gerador = new Random();
-        Scanner teclado = new Scanner(System.in);
         // simulando o programa
         try {
             while(instrucoes < limInst){
@@ -28,7 +33,7 @@ public class Processador{
                 System.out.println(memoria);
                 hit += instrucao.getFirst() == 0 ? 1 : 0;
                 miss += instrucao.getFirst() == 0 ? 0 : 1;
-                //teclado.nextLine();
+                teclado.nextLine();
                 custo_total += 1 + instrucao.getFirst();
                 if(probSalto < instrucao.getSecond().getSecond()){
                     atual = instrucao.getSecond().getFirst();
@@ -41,11 +46,10 @@ public class Processador{
         } catch (IndexOutOfBoundsException e) {
             
         }
-        total += custo_total;
-            System.out.printf("hits por instrução: %.2f\n", (float) hit / instrucoes);
-            System.out.printf("miss por instrução: %.2f\n", (float) miss / instrucoes);
-            System.out.println("custo total " + custo_total);
-            System.out.println("custo medio " + custo_total / instrucoes);
-            System.out.println("FIM! :)");
+        System.out.printf("hits por instrução: %.2f\n", (float) hit / instrucoes);
+        System.out.printf("miss por instrução: %.2f\n", (float) miss / instrucoes);
+        System.out.println("custo total " + custo_total);
+        System.out.println("custo medio " + custo_total / instrucoes);
+        System.out.println("FIM! :)");
     }
 }

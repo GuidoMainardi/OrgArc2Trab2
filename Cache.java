@@ -120,22 +120,32 @@ public class Cache {
     }
 
     public String toString(){
-        String resposta = "+";
-        for(int i = 0; i < cache[0].length * 10; i ++){
-            resposta += "-";
+        String resposta = "";
+        for(int i = 0; i <= cache[0].length * 12; i ++){
+            if(i % 12 == 0){
+                resposta += "+";
+            }else{
+                resposta += "-";
+            }
         }
-        resposta += "+ \n";
+        resposta += "\n";
         for(int i = 0; i < linhas; i ++){
             for(int j = 0; j < cache[0].length; j ++){
-                resposta += "| " + cache[i][j] + " ";
+                if(cache[i][j] == null){
+                    resposta += "|    " + cache[i][j] + "   ";
+                }else{
+                    resposta += "| " + cache[i][j] + " ";
+                }
             }
             resposta += "|\n";
         }
-        resposta += "+";
-        for(int i = 0; i < cache[0].length * 10; i ++){
-            resposta += "-";
+        for(int i = 0; i <= cache[0].length * 12; i ++){
+            if(i % 12 == 0){
+                resposta += "+";
+            }else{
+                resposta += "-";
+            }
         }
-        resposta += "+";
         return resposta;
     }
 }

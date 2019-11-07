@@ -25,6 +25,8 @@ public class Pair<T, E>{
     }
 
     public String toString(){
-        return "<" + first + ":" + second + ">";
+        String formatFirst = String.format("%03d", first);
+        String formatSecond = String.format("%03d", second);
+        return "<" + formatFirst + ":" + formatSecond + ">";
     }
 }

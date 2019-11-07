@@ -13,7 +13,7 @@ public class Processador{
         System.out.println("Qual o numero de vias? ");
         int vias = teclado.nextInt();
         System.out.println("Você deseja usar a politica LFU [L] ou Random [R] ?");
-        String respostas = teclado.nextLine();
+        String respostas = teclado.next();
         boolean LFU = respostas.equalsIgnoreCase("R") ? false : true;
         Cache memoria = new Cache(tamanho, palavra_linha, tamanho_palavra, vias, LFU);
         int limInst = 2000; // limite de instruções a serem executadas, para evitar laços infinitos
